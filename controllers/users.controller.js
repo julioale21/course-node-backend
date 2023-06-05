@@ -1,4 +1,7 @@
 const { request, response } = require('express');
+const bycript = require('bcrypt');
+
+
 const User = require('../models/user');
 
 const usersGet = (req = request, res = response ) => {
@@ -8,7 +11,18 @@ const usersGet = (req = request, res = response ) => {
 }
 
 const usersPost = async (req = request, res = response ) => {
-    const user = new User(req.body);
+
+    const { name, email, password, role } = req.body;
+
+    const user = new User({
+        name, 
+        email,
+        password,
+        role
+    });
+
+    const salt = bycript.genSaltSync();
+    user.password = bycript.hashSync(password, salt);
 
     await user.save();
 
