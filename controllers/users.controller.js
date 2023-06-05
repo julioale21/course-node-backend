@@ -1,8 +1,8 @@
 const { request, response } = require('express');
 const bycript = require('bcrypt');
 
-
 const User = require('../models/user');
+
 
 const usersGet = (req = request, res = response ) => {
     res.json({
@@ -20,6 +20,9 @@ const usersPost = async (req = request, res = response ) => {
         password,
         role
     });
+    const exixtingEmail = User.findOne({ email });
+
+    if (exixtingEmail) return res.status(400).json({ msg: 'The email already exists.' });
 
     const salt = bycript.genSaltSync();
     user.password = bycript.hashSync(password, salt);
