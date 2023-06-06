@@ -20,7 +20,7 @@ const usersPost = async (req = request, res = response ) => {
         password,
         role
     });
-    const exixtingEmail = User.findOne({ email });
+    const exixtingEmail = await User.findOne({ email });
 
     if (exixtingEmail) return res.status(400).json({ msg: 'The email already exists.' });
 
