@@ -62,13 +62,19 @@ const usersPut = async (req = request, res = response ) => {
     });
 }
 
-const usersDelete = (req = request, res = response ) => {
+const usersDelete = async (req = request, res = response ) => {
+
+    const { id } = req.params;
+
+    const user = await User.findByIdAndUpdate( id, { status: false } );
+
     res.json({
-        msg: 'users DELETE'
+        user
     });
 }
 
 const usersPatch = (req = request, res = response ) => {
+
     res.json({
         msg: 'users PATCH'
     });
