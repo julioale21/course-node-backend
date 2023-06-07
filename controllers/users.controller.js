@@ -20,9 +20,6 @@ const usersPost = async (req = request, res = response ) => {
         password,
         role
     });
-    const exixtingEmail = await User.findOne({ email });
-
-    if (exixtingEmail) return res.status(400).json({ msg: 'The email already exists.' });
 
     const salt = bycript.genSaltSync();
     user.password = bycript.hashSync(password, salt);
@@ -35,9 +32,21 @@ const usersPost = async (req = request, res = response ) => {
     });
 }
 
-const usersPut = (req = request, res = response ) => {
+const usersPut = async (req = request, res = response ) => {
+
+    const { id } = req.params;
+    const { _id, password, google, email, ...rest } = req.body;
+
+    if ( password ) {
+        const salt = bycript.genSaltSync();
+        rest.password = bycript.hashSync(password, salt);
+    }
+
+    const user = await User.findByIdAndUpdate( id, rest, { new: true } );
+
     res.json({
-        msg: 'users PUT'
+        msg: 'users PUT',
+        user
     });
 }
 
