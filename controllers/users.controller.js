@@ -4,9 +4,21 @@ const bycript = require('bcrypt');
 const User = require('../models/user');
 
 
-const usersGet = (req = request, res = response ) => {
+const usersGet = async (req = request, res = response ) => {
+
+    const { limit = 10, offset = 0 } = req.query;
+    const query = { status: true }
+
+    const [ users, total ] = await Promise.all([
+        User.find(query)
+                    .skip(Number(offset))
+                    .limit(Number(limit)),
+        User.countDocuments(query)
+    ])
+
     res.json({
-        msg: 'users GET'
+        total,
+        users
     });
 }
 
