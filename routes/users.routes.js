@@ -5,7 +5,6 @@ const {
     usersPost, 
     usersPut, 
     usersDelete, 
-    usersPatch 
 } = require('../controllers/users.controller');
 const { check } = require('express-validator');
 const { validateFields } = require('../middlewares/validate-fields');
@@ -37,7 +36,6 @@ router.delete('/:id', [
     validateFields,
 ], usersDelete);
 
-router.patch('/:id', usersPatch);
 
 
 module.exports = router;
